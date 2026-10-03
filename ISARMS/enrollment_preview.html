@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Subject Enrollment Preview</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Source Sans 3', sans-serif; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #1a3a8c 0%, #2451c8 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+        
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #333; }
+        
+        .student-info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .info-item label { opacity: 0.9; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .info-item .value { font-size: 16px; font-weight: 500; margin-top: 5px; }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; color: #555; }
+        .form-group select { padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; }
+        
+        .subject-list { display: grid; gap: 12px; }
+        .subject-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; display: grid; grid-template-columns: auto 1fr auto; gap: 15px; align-items: center; }
+        .subject-card:hover { border-color: #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1); }
+        .subject-card.enrolled { background: #e7f5e9; border-color: #4caf50; }
+        .subject-checkbox { width: 24px; height: 24px; cursor: pointer; }
+        .subject-info h6 { margin-bottom: 5px; color: #333; font-size: 15px; font-weight: 600; }
+        .subject-info p { margin: 3px 0; color: #666; font-size: 13px; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+        .badge-teacher { background: #e3f2fd; color: #1976d2; }
+        .badge-enrolled { background: #c8e6c9; color: #2e7d32; }
+        .action-buttons { display: flex; gap: 8px; }
+        .btn-enroll { padding: 6px 12px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; }
+        .btn-enroll:hover { background: #45a049; }
+        .btn-drop { padding: 6px 12px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; }
+        .btn-drop:hover { background: #da190b; }
+        
+        .enrollments-section { margin-top: 30px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1.5px solid #ddd; background: white; cursor: pointer; }
+        .tab.active { background: #667eea; color: white; border-color: #667eea; }
+        
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .feature { padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+        .feature h3 { color: #1a3a8c; margin-bottom: 10px; }
+        .feature p { color: #666; font-size: 14px; line-height: 1.6; }
+        .feature ul { margin-left: 20px; color: #666; font-size: 14px; }
+        .feature li { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book-open"></i> Student Subject Self-Enrollment System</h1>
+            <p>Live Preview of the New Interface</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fas fa-user"></i> Student Profile</div>
+            <div class="student-info">
+                <div class="info-item">
+                    <label>Student Number</label>
+                    <div class="value">2024-00001</div>
+                </div>
+                <div class="info-item">
+                    <label>Name</label>
+                    <div class="value">Student, Juan M.</div>
+                </div>
+                <div class="info-item">
+                    <label>Year Level</label>
+                    <div class="value">1st Year</div>
+                </div>
+                <div class="info-item">
+                    <label>Program</label>
+                    <div class="value">BSIT</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fas fa-book-open"></i> Select Enrollment Details</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Academic Year *</label>
+                    <select>
+                        <option>-- Select Academic Year --</option>
+                        <option selected>2024-2025</option>
+                        <option>2023-2024</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Student Type *</label>
+                    <select>
+                        <option>-- Select Type --</option>
+                        <option selected>Regular</option>
+                        <option>Irregular</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Section *</label>
+                    <select>
+                        <option>-- Select Section --</option>
+                        <option selected>BSIT 1-A</option>
+                        <option>BSIT 1-B</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Semester *</label>
+                    <select>
+                        <option>-- Select Semester --</option>
+                        <option selected>1st Semester</option>
+                        <option>2nd Semester</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; padding: 12px;">
+                <i class="fas fa-search"></i> Show Available Subjects
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fas fa-list"></i> Available Subjects</div>
+            <div class="subject-list">
+                <div class="subject-card">
+                    <input type="checkbox" class="subject-checkbox">
+                    <div class="subject-info">
+                        <h6>CC101 - Introduction to Computing</h6>
+                        <p><strong>Units:</strong> 3 | <strong>Year Level:</strong> 1st Year</p>
+                        <p><strong>Teacher:</strong> <span class="badge badge-teacher">Juan Dela Cruz</span></p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-enroll"><i class="fas fa-check"></i> Enroll</button>
+                    </div>
+                </div>
+
+                <div class="subject-card">
+                    <input type="checkbox" class="subject-checkbox">
+                    <div class="subject-info">
+                        <h6>CC102 - Computer Programming 1</h6>
+                        <p><strong>Units:</strong> 3 | <strong>Year Level:</strong> 1st Year</p>
+                        <p><strong>Teacher:</strong> <span class="badge badge-teacher">Juan Dela Cruz</span></p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-enroll"><i class="fas fa-check"></i> Enroll</button>
+                    </div>
+                </div>
+
+                <div class="subject-card enrolled">
+                    <div style="text-align: center;">
+                        <i class="fas fa-check-circle" style="color: #4caf50; font-size: 20px;"></i>
+                    </div>
+                    <div class="subject-info">
+                        <h6>MATH101 - Mathematics in the Modern World</h6>
+                        <p><strong>Units:</strong> 3 | <strong>Year Level:</strong> 1st Year</p>
+                        <p><strong>Teacher:</strong> <span class="badge badge-teacher">Juan Dela Cruz</span> <span class="badge badge-enrolled">✓ Enrolled</span></p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-drop"><i class="fas fa-times"></i> Drop</button>
+                    </div>
+                </div>
+
+                <div class="subject-card">
+                    <input type="checkbox" class="subject-checkbox">
+                    <div class="subject-info">
+                        <h6>GE101 - Purposive Communication</h6>
+                        <p><strong>Units:</strong> 3 | <strong>Year Level:</strong> 1st Year</p>
+                        <p><strong>Teacher:</strong> <span class="badge badge-teacher">Juan Dela Cruz</span></p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-enroll"><i class="fas fa-check"></i> Enroll</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 20px;">
+                <i class="fas fa-check"></i> Enroll in Selected Subjects
+            </button>
+        </div>
+
+        <div class="enrollments-section">
+            <div class="tabs">
+                <div class="tab active"><i class="fas fa-book-open"></i> Available Subjects</div>
+                <div class="tab"><i class="fas fa-graduation-cap"></i> My Enrollments</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-graduation-cap"></i> Your Current Enrollments</div>
+                <div class="subject-list">
+                    <div class="subject-card enrolled">
+                        <div style="text-align: center;">
+                            <i class="fas fa-check-circle" style="color: #4caf50; font-size: 20px;"></i>
+                        </div>
+                        <div class="subject-info">
+                            <h6>CC101 - Introduction to Computing</h6>
+                            <p><strong>Units:</strong> 3 | <strong>Semester:</strong> 1st</p>
+                            <p><strong>Academic Year:</strong> 2024-2025 | <strong>Section:</strong> BSIT 1-A</p>
+                            <p><strong>Teacher:</strong> Juan Dela Cruz</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-drop"><i class="fas fa-times"></i> Drop</button>
+                        </div>
+                    </div>
+
+                    <div class="subject-card enrolled">
+                        <div style="text-align: center;">
+                            <i class="fas fa-check-circle" style="color: #4caf50; font-size: 20px;"></i>
+                        </div>
+                        <div class="subject-info">
+                            <h6>MATH101 - Mathematics in the Modern World</h6>
+                            <p><strong>Units:</strong> 3 | <strong>Semester:</strong> 1st</p>
+                            <p><strong>Academic Year:</strong> 2024-2025 | <strong>Section:</strong> BSIT 1-A</p>
+                            <p><strong>Teacher:</strong> Juan Dela Cruz</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-drop"><i class="fas fa-times"></i> Drop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3><i class="fas fa-hand-pointer"></i> Easy Self-Enrollment</h3>
+                <p>Students can now enroll themselves in subjects without waiting for the registrar. Simply:</p>
+                <ul>
+                    <li>Select academic year</li>
+                    <li>Choose regular or irregular status</li>
+                    <li>Pick their section</li>
+                    <li>Enroll in available subjects</li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3><i class="fas fa-filter"></i> Smart Filtering</h3>
+                <p>The system automatically filters subjects based on:</p>
+                <ul>
+                    <li>Student year level</li>
+                    <li>Regular vs Irregular status</li>
+                    <li>Section assignment</li>
+                    <li>Semester selection</li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3><i class="fas fa-user-tie"></i> Teacher Assignment</h3>
+                <p>Registrar can assign teachers to section subjects:</p>
+                <ul>
+                    <li>View all enrollments</li>
+                    <li>Assign teachers per subject</li>
+                    <li>See enrollment counts</li>
+                    <li>Override drops if needed</li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3><i class="fas fa-check-double"></i> Enrollment Status</h3>
+                <p>Students can see their enrollment status with:</p>
+                <ul>
+                    <li>Enrolled subjects highlighted</li>
+                    <li>Teacher assignments visible</li>
+                    <li>Easy drop/withdrawal option</li>
+                    <li>Bulk enroll capability</li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3><i class="fas fa-graduation-cap"></i> Regular & Irregular</h3>
+                <p>System differentiates between:</p>
+                <ul>
+                    <li>Regular: Year-level restricted subjects</li>
+                    <li>Irregular: Any subject in program</li>
+                    <li>Automatic filtering by type</li>
+                    <li>Clear status indication</li>
+                </ul>
+            </div>
+
+            <div class="feature">
+                <h3><i class="fas fa-list-check"></i> Current Enrollments</h3>
+                <p>Students can manage current enrollments:</p>
+                <ul>
+                    <li>View all active enrollments</li>
+                    <li>See teacher assignments</li>
+                    <li>Drop subjects anytime</li>
+                    <li>Check sections &amp; semesters</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

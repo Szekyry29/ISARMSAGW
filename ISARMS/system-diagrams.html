@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="ISARMS database ERD, system context, DFD levels, and use-case diagrams."/>
+  <title>ISARMS System Diagrams | NEUST Talavera</title>
+  <link rel="icon" type="image/png" href="assets/img/neust-logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root{--navy:#10265f;--blue:#1a3a8c;--gold:#f5c518;--ink:#17243b;--muted:#64748b;--line:#dce4ef;--paper:#fff;--wash:#f2f5fa;--teal:#0f766e;--purple:#6d48a8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--wash);color:var(--ink);font-family:'Source Sans 3',sans-serif}
+    a{color:var(--blue)}
+    .site-head{background:var(--navy);border-top:4px solid var(--gold);color:#fff}
+    .head-inner{max-width:1260px;margin:auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none}
+    .brand img{width:46px;height:46px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
+    .brand strong{display:block;font-size:16px;line-height:1.1}
+    .brand span{display:block;margin-top:4px;color:#f7d950;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+    .head-link{padding:9px 13px;border-radius:7px;color:#fff;text-decoration:none;font-size:13px;font-weight:700}
+    .head-link:hover{background:rgba(255,255,255,.12)}
+    .hero{background:linear-gradient(120deg,#0b1944,#1a3a8c);color:#fff}
+    .hero-inner{max-width:1260px;margin:auto;padding:43px 24px 37px}
+    .eyebrow{color:#ffe889;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+    h1{margin:8px 0;font-size:clamp(32px,5vw,46px);line-height:1.08}
+    .hero p{max-width:780px;margin:0;color:rgba(255,255,255,.8);font-size:15px}
+    .contents{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 3px 12px rgba(20,37,70,.05)}
+    .contents-inner{max-width:1260px;margin:auto;padding:9px 24px;display:flex;gap:8px;overflow-x:auto}
+    .contents a{flex:0 0 auto;padding:8px 11px;border-radius:7px;color:#40516e;text-decoration:none;font-size:12px;font-weight:700}
+    .contents a:hover{background:#edf2ff;color:var(--blue)}
+    main{max-width:1260px;margin:25px auto;padding:0 24px 40px}
+    .diagram-section{scroll-margin-top:74px;margin:0 0 24px;padding:23px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 18px rgba(25,45,83,.045)}
+    .section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:17px}
+    .section-head h2{margin:0;color:var(--navy);font-size:23px}
+    .section-head p{max-width:780px;margin:4px 0 0;color:var(--muted);font-size:13px}
+    .section-number{display:grid;place-items:center;flex:0 0 35px;width:35px;height:35px;border-radius:10px;background:#edf2ff;color:var(--blue);font-size:14px;font-weight:900}
+    .section-title{display:flex;gap:11px;align-items:flex-start}
+    .note{margin:14px 0 0;padding:11px 13px;border-left:3px solid var(--gold);border-radius:5px;background:#fffaf0;color:#5d512d;font-size:12px;line-height:1.5}
+    .svg-scroll{overflow:auto;border:1px solid #e6ecf4;border-radius:10px;background:#fbfcfe}
+    svg.diagram{display:block;width:100%;height:auto;min-width:760px}
+    svg text{font-family:'Source Sans 3',sans-serif}
+    .flow-legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+    .legend{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid #e5eaf2;border-radius:6px;color:#4c5c74;font-size:11px}
+    .legend-shape{width:17px;height:12px;border:2px solid var(--blue);border-radius:3px;background:#edf2ff}
+    .legend-shape.entity{border-color:#9a6a00;background:#fff4c7}
+    .legend-shape.store{border-color:var(--teal);background:#e5f7f4}
+    .legend-shape.process{border-radius:50%;border-color:var(--purple);background:#f2eaff}
+    .entity-group{margin-top:17px}
+    .entity-group h3{margin:0 0 9px;color:#314665;font-size:13px}
+    .entity-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+    .entity{min-width:0;border:1px solid #dfe6f0;border-radius:8px;overflow:hidden;background:#fff}
+    .entity h4{margin:0;padding:8px 10px;background:#edf2ff;color:#173778;font-family:Consolas,monospace;font-size:12px}
+    .entity ul{margin:0;padding:8px 10px 9px 23px;color:#53627a;font-family:Consolas,monospace;font-size:10px;line-height:1.55;overflow-wrap:anywhere}
+    .entity li.key{color:#263c66;font-weight:700}
+    .entity li.ref{color:#176b65}
+    .relationship-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:13px 0 0;padding:0;list-style:none}
+    .relationship-list li{padding:8px 10px;border:1px solid #e5eaf2;border-radius:7px;color:#40516e;font-size:11px}
+    .relationship-list code{color:#176b65;font-size:10px}
+    .usecase-caption{font-size:11px;fill:#51617a}
+    footer{max-width:1260px;margin:auto;padding:0 24px 25px;color:#77849a;font-size:12px}
+    @media(max-width:900px){.entity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.relationship-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:600px){.head-inner{padding:12px 16px}.head-link{font-size:0}.head-link i{font-size:15px}.hero-inner{padding:30px 18px}.contents-inner{padding:8px 14px}main{padding:0 12px 28px}.diagram-section{padding:15px;margin-bottom:14px}.section-head h2{font-size:20px}.entity-grid,.relationship-list{grid-template-columns:1fr}}
+    @media print{body{background:#fff}.contents{position:static;box-shadow:none}.hero-inner{padding:22px 24px}.diagram-section{break-inside:avoid;box-shadow:none;margin-bottom:12px}.svg-scroll{overflow:visible}svg.diagram{min-width:0}.head-link{display:none}}
+  </style>
+</head>
+<body>
+  <header class="site-head">
+    <div class="head-inner">
+      <a class="brand" href="index.php">
+        <img src="assets/img/neust-logo.png" alt="NEUST logo"/>
+        <div><strong>NEUST Talavera</strong><span>ISARMS · System Documentation</span></div>
+      </a>
+      <a class="head-link" href="index.php" aria-label="Return to student portal"><i class="fas fa-arrow-left"></i> Student Portal</a>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">System analysis and design</div>
+      <h1>ISARMS System Diagrams</h1>
+      <p>Database structure, system boundaries, data movement, and user interactions for the Integrated Student Academic Records Management System at NEUST Talavera.</p>
+    </div>
+  </section>
+  <nav class="contents" aria-label="Diagram sections">
+    <div class="contents-inner">
+      <a href="#erd">1 · Database ERD</a>
+      <a href="#context">2 · Context Diagram</a>
+      <a href="#dfd0">3 · DFD Level 0</a>
+      <a href="#dfd1">4 · DFD Level 1</a>
+      <a href="#use-cases">5 · Use-Case Diagram</a>
+    </div>
+  </nav>
+  <main>
+    <section class="diagram-section" id="erd">
+      <div class="section-head">
+        <div class="section-title"><span class="section-number">01</span><div><h2>Database Entity–Relationship Diagram</h2><p>Entities and primary relationships based on the project’s MySQL schema. PK identifies the primary key; FK identifies a foreign-key relationship.</p></div></div>
+      </div>
+      <div class="entity-group">
+        <h3><i class="fas fa-users-gear"></i> People and academic organization</h3>
+        <div class="entity-grid">
+          <article class="entity"><h4>users</h4><ul><li class="key">PK userID</li><li>roleName, email</li><li>fName, lName</li><li class="ref">FK programID → programs</li></ul></article>
+          <article class="entity"><h4>students</h4><ul><li class="key">PK studentID</li><li>studentNo, email</li><li>yearLevel, isActive</li><li class="ref">FK programID → programs</li><li class="ref">FK archiveID → archiving</li></ul></article>
+          <article class="entity"><h4>programs</h4><ul><li class="key">PK programID</li><li>programCode, programName</li></ul></article>
+          <article class="entity"><h4>archiving</h4><ul><li class="key">PK archiveID</li><li>drop, graduate</li><li>dateArchived</li></ul></article>
+          <article class="entity"><h4>acad_years</h4><ul><li class="key">PK acadYearID</li><li>academicYear</li><li>status</li></ul></article>
+          <article class="entity"><h4>sections</h4><ul><li class="key">PK sectionID</li><li>sectionName</li><li class="ref">FK programID → programs</li><li class="ref">FK acadYearID → acad_years</li></ul></article>
+          <article class="entity"><h4>subjects</h4><ul><li class="key">PK subjectID</li><li>subjectCode, subjectName, units</li><li class="ref">FK programID → programs (optional)</li></ul></article>
+          <article class="entity"><h4>section_subjects</h4><ul><li class="key">PK secSubID</li><li class="ref">FK sectionID → sections</li><li class="ref">FK subjectID → subjects</li><li class="ref">FK teacherID → users</li><li class="ref">FK acadYearID → acad_years</li></ul></article>
+        </div>
+      </div>
+      <div class="entity-group">
+        <h3><i class="fas fa-book-open"></i> Enrollment, grades, and honors</h3>
+        <div class="entity-grid">
+          <article class="entity"><h4>enrollments</h4><ul><li class="key">PK enrollmentID</li><li class="ref">FK studentID → students</li><li class="ref">FK subjectID → subjects</li><li class="ref">FK programID → programs</li><li class="ref">FK sectionID → sections</li><li class="ref">FK acadYearID → acad_years</li></ul></article>
+          <article class="entity"><h4>grades</h4><ul><li class="key">PK gradeID</li><li class="ref">FK enrollmentID → enrollments</li><li class="ref">FK studentID → students</li><li class="ref">FK subjectID → subjects</li><li class="ref">FK teacherID → users</li><li class="ref">FK approvedByID → users</li></ul></article>
+          <article class="entity"><h4>gwa_records</h4><ul><li class="key">PK gwaID</li><li class="ref">FK studentID → students</li><li class="ref">FK acadYearID → acad_years</li><li class="ref">FK validatedByID → users</li><li>semester, gwaValue, latinHonor</li></ul></article>
+          <article class="entity"><h4>dean_list_publications</h4><ul><li class="key">PK publicationID</li><li class="ref">FK acadYearID → acad_years</li><li class="ref">FK publishedByID → users</li><li>semester, publishedAt</li></ul></article>
+          <article class="entity"><h4>subject_gwa_rules</h4><ul><li class="key">PK ruleID</li><li class="ref">FK acadYearID → acad_years</li><li class="ref">FK subjectID → subjects</li><li class="ref">FK updatedByID → users</li><li>includeInGwa</li></ul></article>
+          <article class="entity"><h4>ranking</h4><ul><li class="key">PK rankingID</li><li class="ref">FK studentID → students</li><li class="ref">FK gradeID → grades</li><li>badge</li></ul></article>
+          <article class="entity"><h4>grade_audit_log</h4><ul><li class="key">PK logID</li><li class="ref">FK gradeID → grades</li><li>actionBy, actionRole</li><li>oldValue, newValue, actionAt</li></ul></article>
+          <article class="entity"><h4>notifications</h4><ul><li class="key">PK notifID</li><li>recipientID, recipientType</li><li>title, message, type</li><li>isRead, createdAt</li></ul></article>
+        </div>
+      </div>
+      <ul class="relationship-list" aria-label="Primary database relationships">
+        <li>Program <code>1 → many</code> Students, Sections, Subjects, and Enrollments</li>
+        <li>Academic Year <code>1 → many</code> Sections, Enrollments, GWA Rules, GWA Records, and Publications</li>
+        <li>Section <code>1 → many</code> Section Subjects and Enrollments</li>
+        <li>Student <code>1 → many</code> Enrollments, Grades, GWA Records, and Rankings</li>
+        <li>Subject <code>1 → many</code> Section Subjects, Enrollments, Grades, and GWA Rules</li>
+        <li>Enrollment <code>1 → 0/1</code> Grade; a grade is uniquely tied to an enrollment</li>
+        <li>Grade <code>1 → many</code> Audit Log entries and Rankings</li>
+        <li>User accounts serve Admin, Teacher, and Registrar roles and authorize academic actions</li>
+      </ul>
+      <p class="note">Student login credentials are stored in <code>students</code>. Staff credentials and role assignments are stored in <code>users</code>. <code>notifications.recipientID</code> is polymorphic, so its recipient is identified by <code>recipientType</code> rather than a database foreign key.</p>
+    </section>
+
+    <section class="diagram-section" id="context">
+      <div class="section-head">
+        <div class="section-title"><span class="section-number">02</span><div><h2>System Context Diagram</h2><p>ISARMS is shown as one process. External actors exchange information with the system; internal database details are abstracted here.</p></div></div>
+      </div>
+      <div class="svg-scroll">
+        <svg class="diagram" viewBox="0 0 1120 500" role="img" aria-labelledby="contextTitle contextDesc">
+          <title id="contextTitle">ISARMS context diagram</title><desc id="contextDesc">Admin, Registrar, Teacher, Student, and Public Viewer exchange data with the ISARMS system.</desc>
+          <defs><marker id="ctxArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" fill="#667892"/></marker></defs>
+          <rect x="422" y="177" width="276" height="140" rx="25" fill="#10265f"/><text x="560" y="231" text-anchor="middle" fill="#fff" font-size="27" font-weight="800">ISARMS</text><text x="560" y="261" text-anchor="middle" fill="#f7d950" font-size="14">Academic records · grades · GWA · honors</text><text x="560" y="286" text-anchor="middle" fill="#d7e2f5" font-size="12">Web application + MySQL database</text>
+          <g fill="#fff4c7" stroke="#b8860b" stroke-width="2">
+            <rect x="65" y="48" width="182" height="70" rx="9"/><rect x="65" y="162" width="182" height="70" rx="9"/><rect x="65" y="276" width="182" height="70" rx="9"/><rect x="65" y="390" width="182" height="70" rx="9"/>
+            <rect x="873" y="105" width="182" height="70" rx="9"/>
+          </g>
+          <g text-anchor="middle" fill="#3e351b" font-size="17" font-weight="800">
+            <text x="156" y="90">Admin</text><text x="156" y="204">Registrar</text><text x="156" y="318">Teacher</text><text x="156" y="432">Student</text><text x="964" y="147">Public Viewer</text>
+          </g>
+          <g fill="none" stroke="#667892" stroke-width="2" marker-end="url(#ctxArrow)">
+            <path d="M247 78H330V206H422"/><path d="M247 192H365V228H422"/><path d="M247 307H350V248H422"/><path d="M247 420H330V278H422"/>
+            <path d="M698 222H795V141H873"/><path d="M873 159H820V265H698"/>
+          </g>
+          <g fill="#42516a" font-size="11" font-weight="600">
+            <text x="264" y="67">Users, settings, records</text><text x="260" y="183">Approvals, honors, reports</text><text x="264" y="298">Classes and grade submissions</text><text x="264" y="410">Enrollment, profile, grades</text>
+            <text x="712" y="125">Published Dean's List</text><text x="706" y="179">Period and search request</text>
+          </g>
+          <text x="560" y="480" text-anchor="middle" fill="#6b7890" font-size="11">All user access is through the ISARMS web application; role permissions determine available operations.</text>
+        </svg>
+      </div>
+      <div class="flow-legend"><span class="legend"><i class="legend-shape entity"></i> External actor</span><span class="legend"><i class="legend-shape"></i> ISARMS system process</span></div>
+    </section>
+
+    <section class="diagram-section" id="dfd0">
+      <div class="section-head">
+        <div class="section-title"><span class="section-number">03</span><div><h2>Data Flow Diagram — Level 0</h2><p>Top-level decomposition of ISARMS into its principal business processes and shared data stores.</p></div></div>
+      </div>
+      <div class="svg-scroll">
+        <svg class="diagram" viewBox="0 0 1280 760" role="img" aria-labelledby="dfd0Title dfd0Desc">
+          <title id="dfd0Title">ISARMS DFD Level 0</title><desc id="dfd0Desc">External actors interact with six processes: identity and setup, student enrollment, grade management, GWA and honors, student services and reports, and public honors viewing.</desc>
+          <defs><marker id="d0Arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#697b95"/></marker></defs>
+          <g fill="#fff4c7" stroke="#b8860b" stroke-width="2">
+            <rect x="28" y="63" width="156" height="57" rx="8"/><rect x="28" y="171" width="156" height="57" rx="8"/><rect x="28" y="279" width="156" height="57" rx="8"/><rect x="28" y="387" width="156" height="57" rx="8"/><rect x="28" y="495" width="156" height="57" rx="8"/>
+          </g>
+          <g text-anchor="middle" fill="#3e351b" font-size="15" font-weight="800"><text x="106" y="98">Admin</text><text x="106" y="206">Registrar</text><text x="106" y="314">Teacher</text><text x="106" y="422">Student</text><text x="106" y="530">Public Viewer</text></g>
+          <g fill="#f1eaff" stroke="#6d48a8" stroke-width="2">
+            <ellipse cx="365" cy="100" rx="122" ry="43"/><ellipse cx="365" cy="230" rx="122" ry="43"/><ellipse cx="635" cy="100" rx="122" ry="43"/><ellipse cx="635" cy="230" rx="122" ry="43"/><ellipse cx="905" cy="100" rx="122" ry="43"/><ellipse cx="905" cy="230" rx="122" ry="43"/>
+          </g>
+          <g text-anchor="middle" fill="#342653" font-size="13" font-weight="800">
+            <text x="365" y="95">1.0 Identity &amp;</text><text x="365" y="113">Academic Setup</text>
+            <text x="365" y="225">2.0 Student</text><text x="365" y="243">Enrollment</text>
+            <text x="635" y="95">3.0 Grade</text><text x="635" y="113">Management</text>
+            <text x="635" y="225">4.0 GWA &amp;</text><text x="635" y="243">Honors</text>
+            <text x="905" y="95">5.0 Student Services</text><text x="905" y="113">&amp; Reports</text>
+            <text x="905" y="225">6.0 Public Honors</text><text x="905" y="243">Viewing</text>
+          </g>
+          <g fill="#e5f7f4" stroke="#0f766e" stroke-width="2">
+            <rect x="1090" y="48" width="165" height="47" rx="4"/><rect x="1090" y="108" width="165" height="47" rx="4"/><rect x="1090" y="168" width="165" height="47" rx="4"/><rect x="1090" y="228" width="165" height="47" rx="4"/><rect x="1090" y="288" width="165" height="47" rx="4"/><rect x="1090" y="348" width="165" height="47" rx="4"/><rect x="1090" y="408" width="165" height="47" rx="4"/>
+          </g>
+          <g text-anchor="middle" fill="#155b55" font-size="12" font-weight="700"><text x="1172" y="77">D1 Users &amp; Students</text><text x="1172" y="137">D2 Programs &amp; Subjects</text><text x="1172" y="197">D3 Sections &amp; Enrollment</text><text x="1172" y="257">D4 Grades &amp; Audit</text><text x="1172" y="317">D5 GWA &amp; Honors</text><text x="1172" y="377">D6 Academic Years &amp; Rules</text><text x="1172" y="437">D7 Notifications</text></g>
+          <g fill="none" stroke="#697b95" stroke-width="1.7" marker-end="url(#d0Arrow)">
+            <path d="M184 88H239V100H243"/><path d="M184 191H225V124H252"/><path d="M184 200H240V230H243"/><path d="M184 307H513V110"/><path d="M184 415H780V254"/><path d="M184 523H780V249"/>
+            <path d="M487 100H513"/><path d="M487 230H513V137H568"/><path d="M487 230H515V210H513"/><path d="M757 100H783"/><path d="M757 230H783V151H800"/><path d="M757 230H783V224H800"/><path d="M1027 100H1060V71H1090"/><path d="M1027 100H1055V191H1090"/><path d="M1027 230H1065V317H1090"/><path d="M1027 230H1070V257H1090"/><path d="M1027 100H1075V377H1090"/>
+          </g>
+          <g fill="#53627a" font-size="10" font-weight="600"><text x="215" y="78">Accounts / setup</text><text x="205" y="182">Student records</text><text x="202" y="300">Class grades</text><text x="205" y="407">Requests / view</text><text x="200" y="516">Public request</text><text x="499" y="90">Academic data</text><text x="499" y="222">Enrolled students</text><text x="770" y="90">Grade results</text><text x="770" y="218">Computed honors</text><text x="1035" y="64">Maintain records</text><text x="1034" y="307">Validate / publish</text></g>
+          <text x="32" y="608" fill="#52617a" font-size="12" font-weight="700">Processes</text>
+          <text x="32" y="631" fill="#53627a" font-size="11">1.0 Configure accounts, programs, subjects, sections, and academic periods.</text>
+          <text x="32" y="651" fill="#53627a" font-size="11">2.0 Maintain student profiles and assign students to programs, sections, and subjects.</text>
+          <text x="32" y="671" fill="#53627a" font-size="11">3.0 Teachers encode and submit grades; authorized staff review and approve them.</text>
+          <text x="32" y="691" fill="#53627a" font-size="11">4.0 Calculate semester GWA, classify honors, validate results, and publish or unpublish lists.</text>
+          <text x="32" y="711" fill="#53627a" font-size="11">5.0 Provide student grades, GWA, transcripts, notifications, and registrar reports.</text>
+          <text x="32" y="731" fill="#53627a" font-size="11">6.0 Display only Registrar-published Dean's List periods to public visitors.</text>
+        </svg>
+      </div>
+      <div class="flow-legend"><span class="legend"><i class="legend-shape entity"></i> External actor</span><span class="legend"><i class="legend-shape process"></i> Process</span><span class="legend"><i class="legend-shape store"></i> Data store</span></div>
+    </section>
+
+    <section class="diagram-section" id="dfd1">
+      <div class="section-head">
+        <div class="section-title"><span class="section-number">04</span><div><h2>DFD Level 1 — Grade to Published Honors</h2><p>Expansion of process 3.0/4.0 showing how submitted grades become validated GWA/honors and, when published, public Dean’s List data.</p></div></div>
+      </div>
+      <div class="svg-scroll">
+        <svg class="diagram" viewBox="0 0 1240 650" role="img" aria-labelledby="dfd1Title dfd1Desc">
+          <title id="dfd1Title">DFD Level 1 grade and honors workflow</title><desc id="dfd1Desc">Teacher grade entry, registrar approval, GWA calculation, honor validation and publication, student delivery, and public viewing.</desc>
+          <defs><marker id="d1Arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#697b95"/></marker></defs>
+          <g fill="#fff4c7" stroke="#b8860b" stroke-width="2"><rect x="35" y="72" width="150" height="65" rx="9"/><rect x="35" y="278" width="150" height="65" rx="9"/><rect x="1050" y="78" width="155" height="65" rx="9"/><rect x="1050" y="278" width="155" height="65" rx="9"/><rect x="1050" y="478" width="155" height="65" rx="9"/></g>
+          <g text-anchor="middle" fill="#3e351b" font-size="14" font-weight="800"><text x="110" y="111">Teacher</text><text x="110" y="317">Registrar</text><text x="1127" y="105">Student</text><text x="1127" y="305">Public Viewer</text><text x="1127" y="505">Admin</text></g>
+          <g fill="#f1eaff" stroke="#6d48a8" stroke-width="2">
+            <ellipse cx="345" cy="105" rx="105" ry="43"/><ellipse cx="585" cy="105" rx="105" ry="43"/><ellipse cx="825" cy="105" rx="105" ry="43"/><ellipse cx="345" cy="310" rx="105" ry="43"/><ellipse cx="585" cy="310" rx="105" ry="43"/><ellipse cx="825" cy="310" rx="105" ry="43"/><ellipse cx="585" cy="515" rx="105" ry="43"/>
+          </g>
+          <g text-anchor="middle" fill="#342653" font-size="12" font-weight="800">
+            <text x="345" y="100">3.1 Encode &amp;</text><text x="345" y="117">Submit Grades</text><text x="585" y="100">3.2 Review &amp;</text><text x="585" y="117">Approve Grades</text>
+            <text x="825" y="100">4.1 Compute</text><text x="825" y="117">Semester GWA</text><text x="345" y="305">4.2 Classify &amp;</text><text x="345" y="322">Validate Honors</text>
+            <text x="585" y="305">4.3 Publish /</text><text x="585" y="322">Unpublish List</text><text x="825" y="305">5.1 Deliver</text><text x="825" y="322">Student Records</text><text x="585" y="510">3.3 Correct /</text><text x="585" y="527">Recompute</text>
+          </g>
+          <g fill="#e5f7f4" stroke="#0f766e" stroke-width="2"><rect x="265" y="190" width="160" height="40" rx="4"/><rect x="505" y="190" width="160" height="40" rx="4"/><rect x="745" y="190" width="160" height="40" rx="4"/><rect x="265" y="395" width="160" height="40" rx="4"/><rect x="505" y="395" width="160" height="40" rx="4"/><rect x="745" y="395" width="160" height="40" rx="4"/><rect x="505" y="585" width="160" height="40" rx="4"/></g>
+          <g text-anchor="middle" fill="#155b55" font-size="11" font-weight="700"><text x="345" y="215">D1 Grades</text><text x="585" y="215">D2 Grade Audit Log</text><text x="825" y="215">D3 Enrollments / Rules</text><text x="345" y="420">D4 GWA Records</text><text x="585" y="420">D5 Publications</text><text x="825" y="420">D6 Notifications</text><text x="585" y="610">Academic / GWA data</text></g>
+          <g fill="none" stroke="#697b95" stroke-width="1.7" marker-end="url(#d1Arrow)">
+            <path d="M185 105H240"/><path d="M450 105H480"/><path d="M690 105H720"/><path d="M825 148V190"/><path d="M825 148V270H450"/><path d="M585 148V267"/><path d="M345 353V395"/><path d="M450 310H480"/><path d="M585 353V395"/><path d="M690 310H720"/><path d="M930 310H1050"/><path d="M930 310H990V110H1050"/><path d="M690 310H980V310H1050"/><path d="M185 310H240"/><path d="M450 515H480"/><path d="M690 515H825V353"/><path d="M345 148V190"/><path d="M585 148V190"/><path d="M345 353V370H585V353"/><path d="M585 353V370H825V353"/>
+          </g>
+          <g fill="#53627a" font-size="10" font-weight="600"><text x="198" y="94">Grade values</text><text x="454" y="94">Submitted grade</text><text x="697" y="94">Approved grade</text><text x="832" y="175">Active enrollments</text><text x="717" y="251">Eligible results</text><text x="592" y="174">Audit event</text><text x="352" y="377">Computed GWA / honor</text><text x="460" y="298">Validation decision</text><text x="592" y="378">Publication status</text><text x="939" y="297">Released records</text><text x="970" y="188">Published list query</text><text x="967" y="300">List period</text><text x="190" y="299">Recompute request</text><text x="700" y="493">Rules / correction</text></g>
+          <text x="35" y="580" fill="#53627a" font-size="11">GWA uses configured subject inclusion rules and official grade data. Only validated honor records belonging to a published period are returned by the public Dean's List.</text>
+        </svg>
+      </div>
+      <div class="flow-legend"><span class="legend"><i class="legend-shape entity"></i> External actor</span><span class="legend"><i class="legend-shape process"></i> Process</span><span class="legend"><i class="legend-shape store"></i> Data store</span></div>
+    </section>
+
+    <section class="diagram-section" id="use-cases">
+      <div class="section-head">
+        <div class="section-title"><span class="section-number">05</span><div><h2>Use-Case Diagram</h2><p>Primary user roles and capabilities represented in the current ISARMS application.</p></div></div>
+      </div>
+      <div class="svg-scroll">
+        <svg class="diagram" viewBox="0 0 1260 880" role="img" aria-labelledby="useTitle useDesc">
+          <title id="useTitle">ISARMS use-case diagram</title><desc id="useDesc">Admin, Registrar, Teacher, Student, and Public Visitor are outside the ISARMS boundary and linked to role-specific use cases.</desc>
+          <rect x="245" y="25" width="990" height="825" rx="20" fill="#f8faff" stroke="#7c8eaa" stroke-width="2"/>
+          <text x="740" y="54" text-anchor="middle" fill="#10265f" font-size="20" font-weight="800">ISARMS</text>
+          <g fill="#fff" stroke="#1a3a8c" stroke-width="1.6">
+            <ellipse cx="440" cy="140" rx="125" ry="28"/><ellipse cx="720" cy="140" rx="125" ry="28"/><ellipse cx="1000" cy="140" rx="125" ry="28"/>
+            <ellipse cx="440" cy="300" rx="125" ry="28"/><ellipse cx="720" cy="300" rx="125" ry="28"/><ellipse cx="1000" cy="300" rx="125" ry="28"/>
+            <ellipse cx="440" cy="460" rx="125" ry="28"/><ellipse cx="720" cy="460" rx="125" ry="28"/><ellipse cx="1000" cy="460" rx="125" ry="28"/>
+            <ellipse cx="440" cy="620" rx="125" ry="28"/><ellipse cx="720" cy="620" rx="125" ry="28"/><ellipse cx="1000" cy="620" rx="125" ry="28"/>
+            <ellipse cx="720" cy="780" rx="125" ry="28"/><ellipse cx="1000" cy="780" rx="125" ry="28"/>
+          </g>
+          <g text-anchor="middle" fill="#273c62" font-size="12" font-weight="700">
+            <text x="440" y="144">Manage accounts and roles</text><text x="720" y="144">Manage student records / import</text><text x="1000" y="144">Configure programs and academics</text>
+            <text x="440" y="304">Manage student records</text><text x="720" y="304">Review and approve grades</text><text x="1000" y="304">Validate honors / publish list</text>
+            <text x="440" y="464">View assigned classes</text><text x="720" y="464">Encode and submit grades</text><text x="1000" y="464">Review class performance</text>
+            <text x="440" y="624">View grades and transcript</text><text x="720" y="624">View GWA and honors</text><text x="1000" y="624">Manage profile / enrollment</text>
+            <text x="720" y="784">View public Dean's List</text><text x="1000" y="784">Choose period / search list</text>
+          </g>
+          <g fill="none" stroke="#7b8ba3" stroke-width="1.35">
+            <path d="M130 140H315M130 140H260V105H595V140M130 140H260V175H875V140"/>
+            <path d="M130 300H315M130 300H260V265H595V300M130 300H260V335H875V300"/>
+            <path d="M130 460H315M130 460H260V425H595V460M130 460H260V495H875V460"/>
+            <path d="M130 620H315M130 620H260V585H595V620M130 620H260V655H875V620"/>
+            <path d="M130 780H595M130 780H260V745H875V780"/>
+          </g>
+          <g fill="#fff4c7" stroke="#b8860b" stroke-width="2">
+            <circle cx="100" cy="115" r="18"/><path d="M100 133V168M76 146H124M100 168L82 193M100 168L118 193"/>
+            <circle cx="100" cy="275" r="18"/><path d="M100 293V328M76 306H124M100 328L82 353M100 328L118 353"/>
+            <circle cx="100" cy="435" r="18"/><path d="M100 453V488M76 466H124M100 488L82 513M100 488L118 513"/>
+            <circle cx="100" cy="595" r="18"/><path d="M100 613V648M76 626H124M100 648L82 673M100 648L118 673"/>
+            <circle cx="100" cy="755" r="18"/><path d="M100 773V808M76 786H124M100 808L82 833M100 808L118 833"/>
+          </g>
+          <g text-anchor="middle" fill="#3e351b" font-size="12" font-weight="800"><text x="100" y="82">Admin</text><text x="100" y="242">Registrar</text><text x="100" y="402">Teacher</text><text x="100" y="562">Student</text><text x="100" y="722">Public Visitor</text></g>
+        </svg>
+      </div>
+      <div class="flow-legend"><span class="legend"><i class="legend-shape entity"></i> Actor</span><span class="legend"><i class="legend-shape process"></i> Use case</span><span class="legend"><i class="legend-shape"></i> System boundary</span></div>
+      <p class="note">The Student actor accesses only their own academic records and services. The Public Visitor can read the published Dean's List without signing in; publishing and honor validation remain Registrar functions.</p>
+    </section>
+
+    <p class="note">Source basis: project SQL schema (<code>database/isarms_db.sql</code>), role navigation, application modules, and API endpoints. Relationship notes distinguish schema foreign keys from application-level or polymorphic associations.</p>
+  </main>
+  <footer>ISARMS · NEUST Talavera Off-Campus · System analysis documentation</footer>
+</body>
+</html>
